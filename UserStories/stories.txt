@@ -1,0 +1,43 @@
+As a ANONYMOUS i want to create owner account with player and song queue with some tracks
+    providing:
+        login&pass
+        music source such as GoogleDrive, Spotify or Youtube.
+        few favorites/default track/channel
+        and maybe phone number/email.
+
+As a ANONYMOUS user i want to create client user account providing
+    login pass and mayby phone number/email.
+
+As a OWNER user i want to open a browser and log into application
+    so that i wll be authenticated as a owner of player service.
+
+As a CLIENT user i want to log into my account and be authenticated as a client user
+    so that i will have some relevant options to use.
+
+As ANY LOGGED user i want to view list of upcoming songs in playing queue
+    so that i will see upcoming titles, artist and maybe some voting details.
+
+As ANY LOGGED user i want to type title or artist into search box so that i will see result songs
+
+As ANY LOGGED user i want to choose song from results and this song should be added to queue
+
+As a OWNER user i want music to by played immediately after login and
+    continuously song by song without any silent moments.
+
+As a OWNER user i want to share link/id of my player service
+    so that client users can connect to my player.
+
+As a OWNER user i want to have basic controls over music player.
+
+As a OWNER user i want to administrate songs queue.
+
+As a CLIENT I want to connect to any player service providing its link/ID
+
+As a CLIENT I want to see some disabled&muted music player
+    to see which part of a song is being played.
+
+As a CLIENT i want to upvote/downvote particular songs so that would affect queue.
+
+
+
+
