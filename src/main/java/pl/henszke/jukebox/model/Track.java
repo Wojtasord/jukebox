@@ -1,18 +1,25 @@
-package model;
+package pl.henszke.jukebox.model;
 
 import lombok.Data;
-import lombok.Generated;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Objects;
 
+@Entity
 @Data
 public class Track {
 
-    @Generated
-    private long id;
+    @Id
+    @GeneratedValue
+    private int id;
     private String artist;
     private String title;
     private String  url;
+
+    Track() {
+    }
 
     @Override
     public boolean equals(Object o) {
