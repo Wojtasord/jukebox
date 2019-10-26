@@ -1,6 +1,5 @@
 package pl.henszke.jukebox.controller;
 
-import org.assertj.core.api.Fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,23 +11,23 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import pl.henszke.jukebox.application.MusicQueueService;
+import pl.henszke.jukebox.application.PlayerService;
 import pl.henszke.jukebox.model.MusicQueue;
 
-@WebMvcTest(controllers = MusicQueueController.class)
-class MusicQueueControllerIntegrationTest {
+@WebMvcTest(controllers = MusicPlayerController.class)
+class MusicPlayerControllerIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    MusicQueueService musicQueueService;
+    PlayerService playerService;
 
     @BeforeEach
     void setup(){
         MusicQueue musicQueue = new MusicQueue();
         musicQueue.setId(1);
-        Mockito.when(musicQueueService.createNewQueue()).thenReturn(musicQueue);
+        Mockito.when(playerService.createNewQueue()).thenReturn(musicQueue);
     }
 
     @DisplayName("When POST on /jukebox/musicQueue Then new queue is created")
@@ -41,7 +40,7 @@ class MusicQueueControllerIntegrationTest {
                 .post("/jukebox/musicQueue"))
                 // then
                 .andExpect(MockMvcResultMatchers.status().isCreated());
-        Mockito.verify(musicQueueService).createNewQueue();
+        Mockito.verify(playerService).createNewQueue();
     }
 
     @DisplayName("When POST on /jukebox/musicQueue/{id}/tracks with content treackId Then" +
@@ -59,7 +58,7 @@ class MusicQueueControllerIntegrationTest {
                 .content(content))
         // then
                 .andExpect(MockMvcResultMatchers.status().isCreated());
-        Mockito.verify(musicQueueService).addTrackToQueue(1,2);
+        Mockito.verify(playerService).addTrackToQueue(1,2);
 
     }
 

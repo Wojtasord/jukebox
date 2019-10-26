@@ -1,24 +1,20 @@
 package pl.henszke.jukebox.application;
 
-import org.assertj.core.api.Fail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import pl.henszke.jukebox.application.MusicQueueRepository;
-import pl.henszke.jukebox.application.MusicQueueService;
-import pl.henszke.jukebox.application.TrackRepository;
+import org.springframework.test.annotation.DirtiesContext;
 import pl.henszke.jukebox.model.MusicQueue;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import pl.henszke.jukebox.model.Track;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
-class MusicQueueServiceIntegrationTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+class PlayerServiceIntegrationTest {
     @Autowired
-    private MusicQueueService musicQueueService;
+    private PlayerService playerService;
     @Autowired
     private TrackRepository trackRepository;
 
@@ -26,27 +22,27 @@ class MusicQueueServiceIntegrationTest {
     @Test
     void createMusicQueueTest() {
         // when
-        MusicQueue newQueue = musicQueueService.createNewQueue();
+        MusicQueue newQueue = playerService.createNewQueue();
         // then
         assertThat(newQueue).isNotNull();
     }
 
     @DisplayName("When we are adding track to particular musicQueue then this Queue Contains this track  to ")
     @Test
-    void addTrackToQueueTest() throws Exception {
+    void addTrackToQueueTest() {
         // given
         int trackId = 1;
         int queueId = 2;
         Track track = new Track();
         track.setId(trackId);
         trackRepository.save(track);
-        MusicQueue musicQueue = musicQueueService.createNewQueue();
+        MusicQueue musicQueue = playerService.createNewQueue();
         musicQueue.setId(queueId);
         // when
-        musicQueueService.addTrackToQueue(queueId,trackId);
+        playerService.addTrackToQueue(queueId,trackId);
         // then
-        assertThat(musicQueueService.scheduledTracks(queueId)).isNotEmpty();
-        assertThat(musicQueueService.scheduledTracks(queueId)).contains(track);
+        assertThat(playerService.scheduledTracks(queueId)).isNotEmpty();
+        assertThat(playerService.scheduledTracks(queueId)).contains(track);
     }
 //
 //    @DisplayName("test")

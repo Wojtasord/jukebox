@@ -5,15 +5,14 @@ import pl.henszke.jukebox.model.MusicQueue;
 import pl.henszke.jukebox.model.Track;
 
 import java.util.LinkedList;
-import java.util.Optional;
 
 @Service
-public class MusicQueueService {
+public class PlayerService {
 
     private MusicQueueRepository queueRepository;
     private TrackRepository trackRepository;
 
-    public MusicQueueService(MusicQueueRepository queueRepository, TrackRepository trackRepository) {
+    public PlayerService(MusicQueueRepository queueRepository, TrackRepository trackRepository) {
         this.queueRepository = queueRepository;
         this.trackRepository = trackRepository;
     }
@@ -23,7 +22,8 @@ public class MusicQueueService {
     }
 
     public void addTrackToQueue(int queueId, int trackId) {
-        queueRepository.findById(queueId)
+        queueRepository
+                .findById(queueId)
                 .ifPresent(musicQueue -> trackRepository.findById(trackId)
                         .ifPresent(track -> {
                                     musicQueue.addTrackToQueue(track);
