@@ -18,7 +18,7 @@ public class Track {
     private String title;
     private String  url;
 
-    Track() {
+    public Track() {
     }
 
     @Override

@@ -2,10 +2,7 @@ package pl.henszke.jukebox.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.henszke.jukebox.application.MusicQueueService;
 import pl.henszke.jukebox.model.MusicQueue;
 
@@ -24,11 +21,25 @@ public class MusicQueueController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createNewQueue() throws URISyntaxException {
         MusicQueue newQueue = musicQueueService.createNewQueue();
         return ResponseEntity
-                .status(HttpStatus.CREATED).location(new URI("/jukebox/musicQueue" + newQueue.getId()))
+                .status(HttpStatus.CREATED).location(new URI("/jukebox/musicQueue/" + newQueue.getId()))
                 .build();
     }
+    //TODO: use HATEOAS here
+    @PostMapping("{musicQueueId}/tracks")
+    public ResponseEntity<?> addTrackToQueue(@PathVariable("musicQueueId") int queueId ,
+                                             @RequestBody AddTrackDto addTrackDto) throws URISyntaxException {
+        musicQueueService.addTrackToQueue(queueId,addTrackDto.getId());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .location(new URI("/jukebox/musicQueue/"+queueId+"/tracks/"+addTrackDto.getId()))
+                .build();
+    }
+
+    @GetMapping("{musicQueueId}")
+    public ResponseEntity<?> scheduledTracks(@PathVariable("musicQueueId") int queueId){
+        return  null;
+    }
+
 }
