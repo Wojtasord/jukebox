@@ -1,11 +1,15 @@
+package application;
+
+import model.Track;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
-class MusicQueue {
+class MusicQueueService {
 
     private LinkedList<Track> tracklist;
 
-    MusicQueue() {
+    MusicQueueService() {
         this.tracklist = new LinkedList<>();
     }
 
