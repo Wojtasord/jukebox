@@ -6,7 +6,7 @@ As a ANONYMOUS i want to create owner account with player and song queue with so
         and maybe phone number/email.
 
 As a ANONYMOUS user i want to create client user account providing
-    login pass and mayby phone number/email.
+    login pass and maybe phone number/email.
 
 As a OWNER user i want to open a browser and log into application
     so that i wll be authenticated as a owner of player service.
