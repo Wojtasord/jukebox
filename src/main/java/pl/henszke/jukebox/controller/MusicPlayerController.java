@@ -8,12 +8,12 @@ import pl.henszke.jukebox.model.MusicQueue;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 
 @RestController
-@RequestMapping("/jukebox/musicQueue")
+@RequestMapping("/jukebox/musicPlayer")
 public class MusicPlayerController {
-
     private PlayerService playerService;
 
     public MusicPlayerController(PlayerService playerService) {
@@ -24,22 +24,23 @@ public class MusicPlayerController {
     public ResponseEntity<?> createNewQueue() throws URISyntaxException {
         MusicQueue newQueue = playerService.createNewQueue();
         return ResponseEntity
-                .status(HttpStatus.CREATED).location(new URI("/jukebox/musicQueue/" + newQueue.getId()))
+                .status(HttpStatus.CREATED).location(new URI("/jukebox/musicPlayer/" + newQueue.getId()))
                 .build();
     }
     //TODO: use HATEOAS here
-    @PostMapping("{musicQueueId}/tracks")
-    public ResponseEntity<?> addTrackToQueue(@PathVariable("musicQueueId") int queueId ,
+    @PostMapping("/{musicPlayerId}/queue")
+    public ResponseEntity<?> addTrackToQueue(@PathVariable("musicPlayerId") int playerId ,
                                              @RequestBody AddTrackDto addTrackDto) throws URISyntaxException {
-        playerService.addTrackToQueue(queueId,addTrackDto.getId());
+        playerService.addTrackToQueue(playerId,addTrackDto.getId());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .location(new URI("/jukebox/musicQueue/"+queueId+"/tracks/"+addTrackDto.getId()))
+                .location(new URI("/jukebox/musicPlayer/"+playerId+"/queue/"+addTrackDto.getId()))
                 .build();
     }
 
-    @GetMapping("{musicQueueId}")
-    public ResponseEntity<?> scheduledTracks(@PathVariable("musicQueueId") int queueId){
-        return  null;
+    @GetMapping("/{musicPlayerId}/queue")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TrackReadDto> scheduledTracks(@PathVariable("musicPlayerId") int playerId){
+        return playerService.getScheduledTracksReadDto(playerId);
     }
 
 }

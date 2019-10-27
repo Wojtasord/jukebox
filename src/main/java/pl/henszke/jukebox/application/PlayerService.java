@@ -1,10 +1,13 @@
 package pl.henszke.jukebox.application;
 
 import org.springframework.stereotype.Service;
+import pl.henszke.jukebox.controller.TrackReadDto;
 import pl.henszke.jukebox.model.MusicQueue;
 import pl.henszke.jukebox.model.Track;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -33,8 +36,13 @@ public class PlayerService {
     }
 
 
-    LinkedList<Track> scheduledTracks(int queueId) {
-        return queueRepository.findById(queueId).map(MusicQueue::getTracksQueue).orElse(new LinkedList<>());
+    LinkedList<Track> getScheduledTracks(int playerId) {
+        return queueRepository.findById(playerId).map(MusicQueue::getTracksQueue).orElse(new LinkedList<>());
     }
 
+
+    public List<TrackReadDto> getScheduledTracksReadDto(int playerId ) {
+        return getScheduledTracks(playerId).stream()
+                .map(track -> new TrackReadDto(track.getId())).collect(Collectors.toList());
+    }
 }

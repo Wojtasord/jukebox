@@ -1,12 +1,16 @@
 package pl.henszke.jukebox.application;
 
+import org.assertj.core.api.Fail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import pl.henszke.jukebox.controller.TrackReadDto;
 import pl.henszke.jukebox.model.MusicQueue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.henszke.jukebox.model.Track;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -27,9 +31,10 @@ class PlayerServiceIntegrationTest {
         assertThat(newQueue).isNotNull();
     }
 
-    @DisplayName("When we are adding track to particular musicQueue then this Queue Contains this track  to ")
+    @DisplayName("When we are adding track to particular musicQueue " +
+            "Then this Queue return this track when performing getScheduledTracks")
     @Test
-    void addTrackToQueueTest() {
+    void addTrackToQueueAndGetScheduledTracksTest() {
         // given
         int trackId = 1;
         int queueId = 2;
@@ -41,17 +46,28 @@ class PlayerServiceIntegrationTest {
         // when
         playerService.addTrackToQueue(queueId,trackId);
         // then
-        assertThat(playerService.scheduledTracks(queueId)).isNotEmpty();
-        assertThat(playerService.scheduledTracks(queueId)).contains(track);
+        assertThat(playerService.getScheduledTracks(queueId)).isNotEmpty();
+        assertThat(playerService.getScheduledTracks(queueId)).contains(track);
     }
-//
-//    @DisplayName("test")
-//    @Test
-//    void test3
-//            () throws Exception {
-//        // given
-//        // when
-//        // then
-//        Fail.fail("Write your test");
-//    }
+
+    @DisplayName("When getScheduledTracksReadDto() on queue with one track with id 1 " +
+            "Then List of TrackReadDto containing same id is returned")
+    @Test
+    void getScheduledTracksReadDtoTest() {
+        // given
+        int trackId = 1;
+        int queueId = 2;
+        Track track = new Track();
+        track.setId(trackId);
+        trackRepository.save(track);
+        MusicQueue musicQueue = playerService.createNewQueue();
+        musicQueue.setId(queueId);
+        playerService.addTrackToQueue(queueId,trackId);
+        // when
+        List<TrackReadDto> scheduledTracksReadDto = playerService.getScheduledTracksReadDto(queueId);
+        // then
+        assertThat(scheduledTracksReadDto).isNotEmpty();
+        TrackReadDto expectedTrack = new TrackReadDto(trackId);
+        assertThat(scheduledTracksReadDto).containsExactly(expectedTrack);
+    }
 }
