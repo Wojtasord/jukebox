@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.net.URL;
 import java.util.Objects;
 
 @Entity
@@ -16,7 +17,7 @@ public class Track {
     private int id;
     private String artist;
     private String title;
-    private String  url;
+    private URL url;
 
     public Track() {
     }

@@ -1,0 +1,20 @@
+zmienic flow
+    user moze stworzyc player i dostaje player bez zrodla trackow konkretnego źródła, pusta kolejke, i odtwarzacz
+
+    podpiac implementacje jakiegos zrodla trackow do
+
+    stworzyc widoki MVC
+        stronka index na ktorej jest lista playerow do ktorych sie mozna podpiac
+        stronka konkretnego odtwarzacza na nim:
+            koljke schedulowanych trackow,
+            searchbox
+            odtwarzacz
+            stronka rejestracji
+            stronka logowania
+
+    dorobic security
+        anonim: nie zalogowany uzytkownik serwisu, moze widziec odtwarzacze ich zrodla trackow i ich kolejki
+        user: zalogowany uzytkownik seriwsu moze wystepowac w 2 rolach:
+                client: na nie stworzonym przez sibie odtwarzaczy moze dodawac utwory do kolejki z dostepnego zrodla
+                owner: na stworzonym przez siebie odtwarzaczu moze to co klient i dodatkowo adminwe wszelkie rzeczy jak
+                dodawac zrodla, modifikowac kolejke itp

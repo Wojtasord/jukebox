@@ -1,7 +1,6 @@
 package pl.henszke.jukebox.application;
 
 import org.springframework.stereotype.Service;
-import pl.henszke.jukebox.controller.TrackReadDto;
 import pl.henszke.jukebox.model.MusicQueue;
 import pl.henszke.jukebox.model.Track;
 
@@ -13,11 +12,11 @@ import java.util.stream.Collectors;
 public class PlayerService {
 
     private MusicQueueRepository queueRepository;
-    private TrackRepository trackRepository;
+    private TrackSource trackSource;
 
-    public PlayerService(MusicQueueRepository queueRepository, TrackRepository trackRepository) {
+    public PlayerService(MusicQueueRepository queueRepository, TrackSource trackSource) {
         this.queueRepository = queueRepository;
-        this.trackRepository = trackRepository;
+        this.trackSource = trackSource;
     }
 
     public MusicQueue createNewQueue() {
@@ -27,7 +26,7 @@ public class PlayerService {
     public void addTrackToQueue(int queueId, int trackId) {
         queueRepository
                 .findById(queueId)
-                .ifPresent(musicQueue -> trackRepository.findById(trackId)
+                .ifPresent(musicQueue -> trackSource.findById(trackId)
                         .ifPresent(track -> {
                                     musicQueue.addTrackToQueue(track);
                                     queueRepository.save(musicQueue);

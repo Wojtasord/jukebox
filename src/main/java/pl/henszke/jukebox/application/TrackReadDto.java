@@ -1,4 +1,4 @@
-package pl.henszke.jukebox.controller;
+package pl.henszke.jukebox.application;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

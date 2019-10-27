@@ -14,13 +14,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.henszke.jukebox.application.PlayerService;
+import pl.henszke.jukebox.application.TrackReadDto;
 import pl.henszke.jukebox.model.MusicQueue;
 
 import java.util.Collections;
 import java.util.List;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@WebMvcTest(controllers = MusicPlayerController.class)
-class MusicPlayerControllerIntegrationTest {
+@WebMvcTest(controllers = MusicPlayerRestController.class)
+class MusicPlayerRestControllerIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;

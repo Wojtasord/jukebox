@@ -1,10 +1,8 @@
 package pl.henszke.jukebox.application;
 
-import org.assertj.core.api.Fail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import pl.henszke.jukebox.controller.TrackReadDto;
 import pl.henszke.jukebox.model.MusicQueue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +18,7 @@ class PlayerServiceIntegrationTest {
     @Autowired
     private PlayerService playerService;
     @Autowired
-    private TrackRepository trackRepository;
+    private TrackSource trackSource;
 
     @DisplayName("When invoke createNewQueue Then newQueue should be returned")
     @Test
@@ -40,7 +38,7 @@ class PlayerServiceIntegrationTest {
         int queueId = 2;
         Track track = new Track();
         track.setId(trackId);
-        trackRepository.save(track);
+        trackSource.save(track);
         MusicQueue musicQueue = playerService.createNewQueue();
         musicQueue.setId(queueId);
         // when
@@ -59,7 +57,7 @@ class PlayerServiceIntegrationTest {
         int queueId = 2;
         Track track = new Track();
         track.setId(trackId);
-        trackRepository.save(track);
+        trackSource.save(track);
         MusicQueue musicQueue = playerService.createNewQueue();
         musicQueue.setId(queueId);
         playerService.addTrackToQueue(queueId,trackId);
