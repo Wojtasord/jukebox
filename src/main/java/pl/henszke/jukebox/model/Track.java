@@ -5,8 +5,10 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -15,11 +17,17 @@ public class Track {
     @Id
     @GeneratedValue
     private int id;
+    private UUID uuid;
     private String artist;
     private String title;
     private URL url;
 
     public Track() {
+    }
+
+    public Track(String url) throws MalformedURLException {
+        this.url = new URL(url);
+        uuid = UUID.randomUUID();
     }
 
     @Override

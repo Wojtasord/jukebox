@@ -1,16 +1,16 @@
 package pl.henszke.jukebox.application;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import pl.henszke.jukebox.model.MusicQueue;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import pl.henszke.jukebox.model.Track;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -18,7 +18,7 @@ class PlayerServiceIntegrationTest {
     @Autowired
     private PlayerService playerService;
     @Autowired
-    private TrackSource trackSource;
+    private TrackRepository trackRepository;
 
     @DisplayName("When invoke createNewQueue Then newQueue should be returned")
     @Test
@@ -38,7 +38,7 @@ class PlayerServiceIntegrationTest {
         int queueId = 2;
         Track track = new Track();
         track.setId(trackId);
-        trackSource.save(track);
+        trackRepository.save(track);
         MusicQueue musicQueue = playerService.createNewQueue();
         musicQueue.setId(queueId);
         // when
@@ -57,7 +57,7 @@ class PlayerServiceIntegrationTest {
         int queueId = 2;
         Track track = new Track();
         track.setId(trackId);
-        trackSource.save(track);
+        trackRepository.save(track);
         MusicQueue musicQueue = playerService.createNewQueue();
         musicQueue.setId(queueId);
         playerService.addTrackToQueue(queueId,trackId);

@@ -20,15 +20,16 @@ public class MusicQueue {
     public MusicQueue() {
         tracksQueue = new LinkedList<>();
     }
-
-    public LinkedList<Track> getTracksQueue() {
-        return new LinkedList<>(tracksQueue);
-    }
-
     public void addTrackToQueue(Track track){
         tracksQueue.add(track);
     }
-    LinkedList<Track> getScheduledTracks() { return new LinkedList<>(tracksQueue); }
+    public LinkedList<Track> getScheduledTracks() { return new LinkedList<>(tracksQueue); }
+    public Track pop(){
+        LinkedList<Track> linkedQueue = getScheduledTracks();
+        Track track = linkedQueue.pop();
+        setTracksQueue(linkedQueue);
+        return track;
+    }
     //TODO: should return 5 tracks only
     //TODO: add getFullTracks
     //TODO: dodac kolejne zachowania

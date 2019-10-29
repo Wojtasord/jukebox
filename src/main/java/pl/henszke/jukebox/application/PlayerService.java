@@ -6,17 +6,18 @@ import pl.henszke.jukebox.model.Track;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
 
     private MusicQueueRepository queueRepository;
-    private TrackSource trackSource;
+    private TrackRepository trackRepository;
 
-    public PlayerService(MusicQueueRepository queueRepository, TrackSource trackSource) {
+    public PlayerService(MusicQueueRepository queueRepository, TrackRepository trackRepository) {
         this.queueRepository = queueRepository;
-        this.trackSource = trackSource;
+        this.trackRepository = trackRepository;
     }
 
     public MusicQueue createNewQueue() {
@@ -26,7 +27,7 @@ public class PlayerService {
     public void addTrackToQueue(int queueId, int trackId) {
         queueRepository
                 .findById(queueId)
-                .ifPresent(musicQueue -> trackSource.findById(trackId)
+                .ifPresent(musicQueue -> trackRepository.findById(trackId)
                         .ifPresent(track -> {
                                     musicQueue.addTrackToQueue(track);
                                     queueRepository.save(musicQueue);
@@ -34,14 +35,16 @@ public class PlayerService {
                         ));
     }
 
-
-    LinkedList<Track> getScheduledTracks(int playerId) {
-        return queueRepository.findById(playerId).map(MusicQueue::getTracksQueue).orElse(new LinkedList<>());
+    public LinkedList<Track> getScheduledTracks(int queueId) {
+        return queueRepository.findById(queueId).map(MusicQueue::getScheduledTracks).orElse(new LinkedList<>());
     }
 
-
-    public List<TrackReadDto> getScheduledTracksReadDto(int playerId ) {
-        return getScheduledTracks(playerId).stream()
+    public List<TrackReadDto> getScheduledTracksReadDto(int queueId) {
+        return getScheduledTracks(queueId).stream()
                 .map(track -> new TrackReadDto(track.getId())).collect(Collectors.toList());
+    }
+
+    public Optional<Track> popTrackFromQueue(int queueId){
+        return queueRepository.findById(queueId).map(MusicQueue::pop);
     }
 }
