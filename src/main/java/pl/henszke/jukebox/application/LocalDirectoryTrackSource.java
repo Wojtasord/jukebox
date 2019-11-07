@@ -1,27 +1,28 @@
 package pl.henszke.jukebox.application;
 
+import org.apache.commons.io.FileUtils;
 import pl.henszke.jukebox.model.Track;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class LocalDirectoryTrackSource implements TrackSource {
 
-    private String directorySourceUrl;
     private Path sourceDirectoryPath;
+    private Collection<Track> tracks;
 
     public LocalDirectoryTrackSource(String directorySourceUrl) {
-        this.directorySourceUrl = directorySourceUrl;
         sourceDirectoryPath = new File(directorySourceUrl).toPath();
+        tracks = new ArrayList<>();
     }
 
     @Override
@@ -40,25 +41,28 @@ public class LocalDirectoryTrackSource implements TrackSource {
     }
 
     @Override
-    public InputStream loadContent(UUID trackId) {
-        ArrayList<Track> result = new ArrayList<>();
-        Track track1 = findAll().stream()
-                .filter(track -> track.getUuid() == trackId).findFirst().get();
+    public InputStream loadContent(int trackId) {
+        Collection<Track> result = findAll();
+        Optional<Track> track1 = result.stream()
+                .filter(track -> track.getId() == trackId).findAny();
         try {
-            return new FileInputStream(new File(String.valueOf(track1.getUrl())));
+            return FileUtils.openInputStream(new File(String.valueOf(track1.orElseThrow(() -> new FileNotFoundException("Cant find this track")).getUrl().getPath())));
         } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     private Collection<Track> readTracksFromDirectory(Path directory) throws IOException {
-        List<Track> allTracks = new ArrayList<>();
+        Set<Track> allTracks = new HashSet<>(tracks);
         Files.walkFileTree(directory, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 if (file.toString().endsWith(".mp3")) {
-                    allTracks.add(new Track("file://" + file.toAbsolutePath()));
+                    allTracks.add(new Track("file:/" + file.toAbsolutePath()));
                 }
                 return FileVisitResult.CONTINUE;
             }
